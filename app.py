@@ -1,6 +1,7 @@
 import streamlit as st
 import pickle
 import pandas as pd
+import numpy as np
 
 # -------------------------
 # PAGE CONFIG
@@ -59,7 +60,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     person_age = st.number_input("Age", 18, 100, 30)
-    person_income = st.number_input("Annual Income ($)", 0, 1_000_000, 50000)
+    person_income = st.number_input("Annual Income ($)", 1, 1_000_000, 50000)
     person_home_ownership = st.selectbox(
         "Home Ownership",
         ["RENT", "MORTGAGE", "OWN", "OTHER"]
@@ -72,16 +73,31 @@ with col2:
         ["EDUCATION", "MEDICAL", "VENTURE", "PERSONAL",
          "DEBTCONSOLIDATION", "HOMEIMPROVEMENT"]
     )
-    loan_amnt = st.number_input("Loan Amount ($)", 0, 1_000_000, 10000)
+    loan_amnt = st.number_input("Loan Amount ($)", 1, 1_000_000, 10000)
     loan_int_rate = st.number_input("Interest Rate (%)", 0.0, 100.0, 10.0)
-    loan_percent_income = st.number_input("Loan to Income Ratio", 0.0, 1.0, 0.2)
     cb_person_default_on_file = st.selectbox("Historical Default", ["Y", "N"])
     cb_person_cred_hist_length = st.number_input("Credit History (Years)", 0, 50, 3)
+
+# Auto-calculate Loan-to-Income Ratio
+loan_percent_income = loan_amnt / person_income
+
+st.info(f"📊 Auto Calculated Loan-to-Income Ratio: {loan_percent_income:.2f}")
 
 st.divider()
 
 # -------------------------
-# PREDICTION BUTTON
+# RISK BAND FUNCTION
+# -------------------------
+def get_risk_band(prob):
+    if prob < 0.30:
+        return "Low Risk 🟢"
+    elif prob < 0.70:
+        return "Medium Risk 🟡"
+    else:
+        return "High Risk 🔴"
+
+# -------------------------
+# PREDICTION
 # -------------------------
 if st.button("🚀 Predict Credit Risk"):
 
@@ -99,26 +115,31 @@ if st.button("🚀 Predict Credit Risk"):
     ]], columns=FEATURES)
 
     try:
-        # Encode categorical columns
+        # Encode categorical features
         for col, encoder in encoders.items():
             if col in input_data.columns:
                 input_data[col] = encoder.transform(input_data[col])
 
-        # Scale
+        # Scale numerical features
         input_scaled = scaler.transform(input_data)
 
-        # Predict
-        prediction = model.predict(input_scaled)[0]
-        probability = model.predict_proba(input_scaled)[0][1] * 100
+        # Predict probability
+        probability = model.predict_proba(input_scaled)[0][1]
+
+        # Avoid pure 1.0 display issue
+        probability = min(probability, 0.9999)
+
+        risk_band = get_risk_band(probability)
 
         st.subheader("📊 Risk Assessment Result")
 
-        if prediction == 1:
-            st.error(f"⚠ High Risk of Default\n\nProbability: **{probability:.2f}%**")
-        else:
-            st.success(f"✅ Low Risk Applicant\n\nProbability: **{probability:.2f}%**")
+        colA, colB, colC = st.columns(3)
 
-        st.progress(int(probability))
+        colA.metric("Probability of Default", f"{probability*100:.2f}%")
+        colB.metric("Risk Category", risk_band)
+        colC.metric("Model Confidence", f"{max(probability, 1-probability)*100:.2f}%")
+
+        st.progress(int(probability * 100))
 
     except Exception as e:
         st.error(f"Prediction Error: {e}")
@@ -138,28 +159,33 @@ if uploaded_file:
         try:
             processed_df = batch_df.copy()
 
-            # Encode
+            # Auto compute Loan-to-Income
+            processed_df["loan_percent_income"] = (
+                processed_df["loan_amnt($)"] /
+                processed_df["person_income($)"]
+            )
+
+            # Encode categorical columns
             for col, encoder in encoders.items():
                 if col in processed_df.columns:
                     processed_df[col] = encoder.transform(processed_df[col])
 
-            # Ensure correct column order
-            processed_data = scaler.transform(processed_df[FEATURES])
+            # Scale
+            processed_scaled = scaler.transform(processed_df[FEATURES])
 
-            predictions = model.predict(processed_data)
-            probabilities = model.predict_proba(processed_data)[:, 1]
+            probabilities = model.predict_proba(processed_scaled)[:, 1]
+            probabilities = np.minimum(probabilities, 0.9999)
 
-            batch_df["Risk_Class"] = [
-                "High Risk" if p == 1 else "Low Risk"
-                for p in predictions
+            processed_df["Default_Probability"] = probabilities
+            processed_df["Risk_Category"] = [
+                get_risk_band(p) for p in probabilities
             ]
-            batch_df["Default_Probability"] = probabilities
 
-            st.dataframe(batch_df)
+            st.dataframe(processed_df)
 
             st.download_button(
                 "Download Results",
-                batch_df.to_csv(index=False),
+                processed_df.to_csv(index=False),
                 "credit_risk_predictions.csv",
                 "text/csv"
             )
@@ -168,7 +194,7 @@ if uploaded_file:
             st.error(f"Batch Processing Error: {e}")
 
 # -------------------------
-# MODEL PERFORMANCE (Optional for Milestone 1)
+# MODEL PERFORMANCE
 # -------------------------
 st.divider()
 st.subheader("📈 Model Performance Summary")
