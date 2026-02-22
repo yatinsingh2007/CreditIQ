@@ -36,6 +36,9 @@ html, body, [class*="css"] {
 
 /* Hide Streamlit branding but keep sidebar toggle */
 #MainMenu, footer { visibility: hidden; }
+
+/* The stHeader contains the Expand Sidebar toggle. We make the header transparent 
+   but ensure all its child buttons (like the sidebar toggler) are styled properly. */
 [data-testid="stHeader"] {
     background: transparent !important;
 }
@@ -43,7 +46,69 @@ html, body, [class*="css"] {
     visibility: hidden !important;
 }
 
-/* ─── Sidebar ─── */
+/* ─── Sidebar & Toggles (Fixing "Open Navigation" Button) ─── */
+/* For versions using generic header button selectors / aria-labels */
+button[kind="header"] {
+    color: #e2e8f0 !important;
+    background-color: transparent !important;
+}
+button[aria-label="Expand sidebar"], 
+[data-testid="collapsedControl"],
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="stExpandSidebarButton"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #38bdf8 !important;
+    background: #0d1117 !important;
+    border: 1px solid #1e2d40 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
+    margin-top: 5px !important;
+    margin-left: 5px !important;
+    transition: all 0.2s ease !important;
+    z-index: 999999 !important;
+}
+
+/* Also ensure its parent container is visible so the button can be clicked */
+div:has(> [data-testid="stExpandSidebarButton"]) {
+    visibility: visible !important;
+    z-index: 999999 !important;
+}
+
+button[aria-label="Expand sidebar"]:hover, 
+[data-testid="collapsedControl"]:hover,
+[data-testid="stSidebarCollapsedControl"]:hover,
+[data-testid="stExpandSidebarButton"]:hover {
+    border-color: #38bdf8 !important;
+    background: #111827 !important;
+}
+/* Ensure the SVG inside the button inherits color */
+button[aria-label="Expand sidebar"] svg, 
+[data-testid="collapsedControl"] svg,
+[data-testid="stSidebarCollapsedControl"] svg,
+[data-testid="stExpandSidebarButton"] svg {
+    fill: currentColor !important;
+}
+
+/* ─── Sidebar Close Button ─── */
+button[aria-label="Collapse sidebar"],
+[data-testid="stSidebarCollapseButton"] {
+    visibility: visible !important;
+    color: #94a3b8 !important;
+    transition: color 0.2s ease !important;
+}
+button[aria-label="Collapse sidebar"]:hover,
+[data-testid="stSidebarCollapseButton"]:hover {
+    color: #38bdf8 !important;
+}
+button[aria-label="Collapse sidebar"] svg,
+[data-testid="stSidebarCollapseButton"] svg {
+    fill: currentColor !important;
+}
+
 [data-testid="stSidebar"] {
     background: #0d1117 !important;
     border-right: 1px solid #1e2d40 !important;
