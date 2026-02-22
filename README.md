@@ -54,14 +54,38 @@ This project is an **AI-powered Credit Risk Scoring System** designed to evaluat
     - **Predict**: Click "Predict Credit Risk" to see the Default Probability and Risk Category.
     - **Batch Mode**: Upload a CSV file containing applicant data to generate predictions for a whole dataset.
 
-## 📊 Model Performance
+## 🧠 Model Training Pipeline
 
-The system uses a tuned **Decision Tree Classifier** with the following performance metrics:
+The machine learning models are trained and evaluated in `notebook/model_training.ipynb`. This pipeline handles data transformation, model creation, and exporting a single production-ready artifact (`dt_model.pkl`).
+
+### 1. Data Preprocessing
+
+- **Categorical Encoding:** `LabelEncoder` maps categorical variables (e.g., home ownership, loan intent) to numerical counterparts.
+- **Feature Scaling:** `StandardScaler` standardizes numerical features so distances and relative importance maintain balance.
+
+### 2. Trained Models
+
+Two classification models are trained to evaluate baseline versus non-linear performance:
+
+- **Logistic Regression:** A reliable baseline demonstrating linear relationships.
+- **Decision Tree Classifier (Primary):** The main deployed model tuned with a `max_depth` of `10` to balance learning patterns against overfitting.
+
+### 3. Model Performance (Decision Tree)
+
+The Decision Tree classifier is the primary predictor for the application with the following metrics:
 
 - **Training Accuracy**: ~92.9%
 - **Testing Accuracy**: ~91.0%
 
-The model ensures balanced generalization to avoid overfitting while maintaining high predictive accuracy.
+### 4. Artifact Export (`dt_model.pkl`)
+
+The notebook packages and exports the deployment artifact using `pickle`. Streamlit loads this entire package directly. The package contains:
+
+- The trained **Decision Tree Model** (primary)
+- The trained **Logistic Regression Model** (secondary comparison)
+- The fitted **StandardScaler** and **LabelEncoders**
+- Optimal probability thresholds
+- Performance validation metrics
 
 ## 📝 Input Features
 
