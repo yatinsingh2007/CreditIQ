@@ -375,10 +375,12 @@ button[aria-label="Collapse sidebar"] svg,
     background: #FFFFFF;
 }
 .result-card.good {
-    border: 2px solid #000000;
+    border: 2px solid #166534;
+    border-left: 6px solid #166534;
 }
 .result-card.bad {
-    border: 2px solid #000000;
+    border: 2px solid #991B1B;
+    border-left: 6px solid #991B1B;
 }
 .result-card .result-icon {
     font-size: 1rem;
@@ -388,15 +390,17 @@ button[aria-label="Collapse sidebar"] svg,
     font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #000000;
 }
+.result-card.good .result-icon { color: #166534; }
+.result-card.bad .result-icon { color: #991B1B; }
 .result-card .result-title {
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 0.4rem;
-    color: #000000;
 }
+.result-card.good .result-title { color: #166534; }
+.result-card.bad .result-title { color: #991B1B; }
 .result-card .result-sub {
     color: #222222;
     font-size: 0.9rem;
@@ -413,13 +417,10 @@ button[aria-label="Collapse sidebar"] svg,
     letter-spacing: 0.15em;
     margin-top: 1rem;
     font-family: 'IBM Plex Mono', monospace;
-    background: #FFFFFF;
-    color: #000000;
-    border: 1px solid #000000;
 }
-.risk-low { background: #FFFFFF; color: #000000; border: 2px solid #000000; }
-.risk-med { background: #F5F5F5; color: #000000; border: 2px solid #000000; }
-.risk-high { background: #000000; color: #FFFFFF; border: 2px solid #000000; }
+.risk-low { background: #F0FDF4; color: #166534; border: 2px solid #166534; }
+.risk-med { background: #FFFBEB; color: #92400E; border: 2px solid #92400E; }
+.risk-high { background: #FEF2F2; color: #991B1B; border: 2px solid #991B1B; }
 
 .prob-label {
     display: flex;
@@ -512,7 +513,7 @@ button[aria-label="Collapse sidebar"] svg,
 /* ── Override Streamlit slider ── */
 [data-testid="stSlider"] { padding-top: 0.2rem; }
 
-/* ── Submit Button: Black BG, White Text, Hover Inverts ── */
+/* ── Submit Button: Black BG, White Text ── */
 [data-testid="stFormSubmitButton"] button {
     background: #000000 !important;
     color: #FFFFFF !important;
@@ -525,18 +526,52 @@ button[aria-label="Collapse sidebar"] svg,
     transition: all 0.2s ease !important;
     letter-spacing: 0.05em !important;
 }
+[data-testid="stFormSubmitButton"] button p,
+[data-testid="stFormSubmitButton"] button span,
+[data-testid="stFormSubmitButton"] button div {
+    color: #FFFFFF !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
 [data-testid="stFormSubmitButton"] button:hover {
-    background: #FFFFFF !important;
+    background: #333333 !important;
+    color: #FFFFFF !important;
+    border-color: #333333 !important;
+}
+[data-testid="stFormSubmitButton"] button:hover p,
+[data-testid="stFormSubmitButton"] button:hover span,
+[data-testid="stFormSubmitButton"] button:hover div {
+    color: #FFFFFF !important;
+    background: transparent !important;
+}
+
+/* ── FORCE ALL TEXT BLACK: Global catch-all ── */
+[data-testid="stSidebar"] *,
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] span,
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] div {
     color: #000000 !important;
 }
 
-/* ── Override Streamlit radio ── */
-[data-testid="stRadio"] label {
-    font-size: 0.92rem !important;
-    padding: 0.3rem 0 !important;
-    font-family: 'Inter', sans-serif !important;
+/* ── Override Streamlit radio: ALL contexts ── */
+[data-testid="stRadio"] label,
+[data-testid="stRadio"] label span,
+[data-testid="stRadio"] label p,
+[data-testid="stRadio"] label div,
+[data-testid="stRadio"] div[role="radiogroup"] label,
+[data-testid="stRadio"] div[role="radiogroup"] label span,
+[data-testid="stRadio"] div[role="radiogroup"] label p,
+[data-testid="stRadio"] div[role="radiogroup"] label div {
     color: #000000 !important;
-    font-weight: 500 !important;
+    font-size: 0.95rem !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+}
+[data-testid="stRadio"] label {
+    padding: 0.35rem 0 !important;
 }
 
 /* ── Override Streamlit form inputs ── */
@@ -556,26 +591,31 @@ button[aria-label="Collapse sidebar"] svg,
 }
 
 /* ── Override Streamlit selectbox ── */
-[data-testid="stSelectbox"] > div > div {
+[data-testid="stSelectbox"] > div > div,
+[data-testid="stSelectbox"] > div > div > div {
     background: #FFFFFF !important;
     color: #000000 !important;
     border: 1px solid #CCCCCC !important;
     border-radius: 4px !important;
 }
-[data-testid="stSelectbox"] label {
+[data-testid="stSelectbox"] label,
+[data-testid="stSelectbox"] span {
     color: #000000 !important;
     font-weight: 600 !important;
 }
 
-/* ── Override all Streamlit labels ── */
-.stSlider label, .stSelectbox label, .stNumberInput label, .stTextInput label {
+/* ── Force ALL Streamlit labels & widget text black ── */
+label, .stSlider label, .stSelectbox label, .stNumberInput label, .stTextInput label,
+[data-testid="stWidgetLabel"], [data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] span, [data-testid="stWidgetLabel"] div,
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] span {
     color: #000000 !important;
     font-weight: 600 !important;
-    font-size: 0.88rem !important;
 }
 
 /* ── Subheader ── */
-h2, h3 {
+h1, h2, h3, h4, h5, h6 {
     color: #000000 !important;
     font-family: 'Playfair Display', Georgia, serif !important;
 }
@@ -586,10 +626,12 @@ h2, h3 {
 ::-webkit-scrollbar-thumb { background: #CCCCCC; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #999999; }
 
-/* ── Sidebar radio labels ── */
-[data-testid="stSidebar"] [data-testid="stRadio"] label {
+/* ── Sidebar radio: extra specificity ── */
+[data-testid="stSidebar"] [data-testid="stRadio"] label,
+[data-testid="stSidebar"] [data-testid="stRadio"] label * {
     color: #000000 !important;
-    font-weight: 600 !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
 }
 [data-testid="stSidebar"] [data-testid="stRadio"] label:hover {
     background: #FFFFFF;
@@ -790,8 +832,10 @@ if page == "Overview":
             borderwidth=1,
         ),
         margin=dict(l=10, r=10, t=80, b=10),
-        yaxis=dict(gridcolor='#F5F5F5', range=[0, 1.15], linecolor='#CCCCCC'),
-        xaxis=dict(gridcolor='#FFFFFF', linecolor='#CCCCCC'),
+        yaxis=dict(gridcolor='#F5F5F5', range=[0, 1.15], linecolor='#CCCCCC',
+                   tickfont=dict(color='#000000', size=12)),
+        xaxis=dict(gridcolor='#FFFFFF', linecolor='#CCCCCC',
+                   tickfont=dict(color='#000000', size=12)),
         bargap=0.25,
         bargroupgap=0.08,
     )
