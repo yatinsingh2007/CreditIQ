@@ -11,7 +11,7 @@ import altair as alt
 
 st.set_page_config(
     page_title="CreditIQ — Risk Intelligence",
-    page_icon=None,
+    page_icon="images/design-a-clean-minimal-black-and-white-l_tet7fcgyRKSPS-c0YaYOWQ_wgYqleLoQrOLRep7j-l0EA_sd.jpeg",
     layout="wide",
     initial_sidebar_state="auto"
 )
