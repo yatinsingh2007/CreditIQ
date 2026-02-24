@@ -624,7 +624,7 @@ if pkg is None:
 model          = pkg["model"]
 lr_model       = pkg["lr_model"]
 scaler         = pkg["scaler"]
-encoders       = pkg["encoders"]
+encoders       = pkg.get("encoders", {})
 feature_cols   = pkg["feature_columns"]
 dt_threshold   = pkg.get("dt_threshold", 0.35)
 lr_threshold   = pkg.get("lr_threshold", 0.35)
