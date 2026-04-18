@@ -38,8 +38,12 @@ from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunct
 # numbers through the rest of the file.
 # =============================================================================
 
-# Groq model used for every LLM call in the pipeline.
-GROQ_MODEL = "llama-3.3-70b-versatile"
+# Groq models used in the pipeline.
+# STRONG: for complex reasoning and tool orchestration.
+# FAST: for simple planning and auditing (saves tokens/avoids 429s).
+GROQ_MODEL_STRONG = "llama-3.3-70b-versatile"
+GROQ_MODEL_FAST   = "llama-3.1-8b-instant"
+
 
 # Path to the pickled Decision Tree model package.
 # Override at runtime by setting the DT_MODEL_PATH environment variable.
@@ -1466,7 +1470,7 @@ def run_planner(applicant_data, groq_client, verbose=True):
 
     try:
         resp = groq_client.chat.completions.create(
-            model=GROQ_MODEL,
+            model=GROQ_MODEL_FAST,
             messages=[
                 {"role": "system", "content": _PLANNER_SYSTEM},
                 {"role": "user",   "content": user_prompt},
@@ -1667,7 +1671,7 @@ def run_executor(state, groq_client, verbose=True):
 
         try:
             resp = groq_client.chat.completions.create(
-                model=GROQ_MODEL,
+                model=GROQ_MODEL_STRONG,
                 messages=messages,
                 tools=TOOLS_SCHEMA,
                 tool_choice="auto",
@@ -1849,7 +1853,7 @@ def run_reflector(state, groq_client, verbose=True):
 
     try:
         resp = groq_client.chat.completions.create(
-            model=GROQ_MODEL,
+            model=GROQ_MODEL_FAST,
             messages=[
                 {"role": "system", "content": _REFLECTOR_SYSTEM},
                 {
@@ -1951,7 +1955,7 @@ def run_reporter(state, groq_client, verbose=True):
 
     try:
         resp = groq_client.chat.completions.create(
-            model=GROQ_MODEL,
+            model=GROQ_MODEL_STRONG,
             messages=[
                 {"role": "system", "content": _REPORTER_SYSTEM},
                 {
