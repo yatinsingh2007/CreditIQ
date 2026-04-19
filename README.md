@@ -1,6 +1,26 @@
 # CreditIQ — Agentic Risk Intelligence Platform
 
-**CreditIQ** is a next-generation credit risk assessment platform that bridges the gap between traditional machine learning and transparent, agentic AI. It transforms raw financial data into professional, auditable, and narrative risk reports using a custom **Plan-Execute-Reflect (PER)** framework.
+> **Quick Links**: [Intuitive Workflow](#🧠-intuitive-workflow-overview) | [Technical Architecture](#🏗-system-architecture) | [Detailed File Map](file:///Users/kshtriyatinsingh/Desktop/CreditIQ/cleaned.md)
+
+**CreditIQ** is an advanced decision-making engine that uses AI to analyze loan applications. Unlike traditional systems that just give a "Yes" or "No," CreditIQ follows a deep reasoning process—much like a senior credit committee—to justify its decisions with data, policy, and logic.
+
+---
+
+## 🧠 Intuitive Workflow Overview: The "Expert Committee"
+
+To understand how CreditIQ processes a loan without diving into the code, imagine a **three-tier expert committee** working in sync:
+
+1.  **Phase 1: The Strategist (The Planner)**  
+    Instead of jumping straight into the data, the AI starts by acting as a **Lead Underwriter**. It reviews the applicant's basic profile and decides on a strategy. Just like a human expert, it asks: *"What specific risks do I need to investigate for this person? Do I need to look deeper into their medical loan intent or their historical defaults?"* It produces a tailored roadmap for the rest of the system to follow.
+
+2.  **Phase 2: The Investigator (The Executor)**  
+    This is the "worker" phase. Guided by the Strategist's roadmap, the system reaches into its **Tool Registry**. It calculates the machine learning risk score, benchmarks the applicant against their peers (Income vs. Loan), and scans the corporate credit policy. It gathers every piece of evidence needed to make an informed decision.
+
+3.  **Phase 3: The Independent Auditor (The Reflector)**  
+    This is what makes CreditIQ **"Agentic."** A separate logic layer reviews the Investigator's work. It doesn't just trust the results; it audits them for consistency. If the Auditor finds that a crucial piece of policy was ignored or a calculation seems fishy, it triggers a **self-correction loop**, forcing the Investigator to go back and fix the mistake. This ensures the final decision is logically sound and auditable.
+
+4.  **Phase 4: The Professional Communicator (The Reporter)**  
+    Calculations and JSON data aren't useful for a bank manager. This final phase takes the complex audit trail and translates it into a **professional narrative report**. It explains the "Why" behind the "Yes" or "No," citing specific policy clauses and risk factors, so a human can verify the decision in seconds.
 
 ---
 

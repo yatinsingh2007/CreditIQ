@@ -6,6 +6,28 @@
 
 ---
 
+## 🗺️ Functional Architecture: How It All Fits Together
+
+This repository is organized into distinct layers, ensuring that data science, AI orchestration, and user interaction are seamlessly integrated yet modular.
+
+### 1. The Interaction Layer: `app.py`
+This is the "Command Center." It's a high-performance Streamlit application that provides a professional interface for underwriters. It doesn't just display results; it handles **asynchronous state management** and renders complex visualizations (Plotly/Altair) to show peer benchmarks and risk distributions.
+
+### 2. The Intelligence Artifact: `dt_model.pkl`
+This is the project's "Shared Memory." It contains the trained **Decision Tree** and **Logistic Regression** models, but it also carries the metadata required for production: feature scalers, categorical encoders, and performance metrics. By bundling these into a single artifact, we ensure that the AI "thinks" exactly the same way in the lab as it does in production.
+
+### 3. The Agentic Orchestrator: `agent_pipeline.py`
+This is the "Brain" of the system, powered by **LangGraph**. It defines the state machine that governs how the AI moves between planning, investigating, and auditing. It contains the **Tool Registry** (the specific functions the AI can call) and the logic for the **self-correction loops** (Phase 3: Reflection).
+
+### 4. The Data Ecosystem: `data/`
+- **`raw/`**: The original source data (32k+ records from Kaggle), kept untouched for reproducibility.
+- **`cleaned/`**: The refined dataset, where we've handled outliers, imputed missing values, and engineered new features like `loan_grade`.
+
+### 5. The Development Lab: `notebook/`
+These are the scientific "Workbooks" where the data cleaning and model training were originally developed. They provide an end-to-end audit trail of how the models were tuned and why certain features were selected.
+
+---
+
 ## 📁 Project Directory Tree
 
 ```
