@@ -256,9 +256,9 @@ button[aria-label="Collapse sidebar"] svg,
 /* ── Feature Tags ── */
 .feature-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
 .feature-tag {
-    background: #FFFFFF;
-    border: 1px solid #000000;
-    color: #000000;
+    background: #FFFFFF !important;
+    border: 1px solid #000000 !important;
+    color: #000000 !important;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.8rem;
     padding: 0.45rem 0.9rem;
@@ -267,8 +267,8 @@ button[aria-label="Collapse sidebar"] svg,
     font-weight: 500;
 }
 .feature-tag:hover {
-    background: #000000;
-    color: #FFFFFF;
+    background: #000000 !important;
+    color: #FFFFFF !important;
 }
 
 /* ── Tab Overrides ── */
